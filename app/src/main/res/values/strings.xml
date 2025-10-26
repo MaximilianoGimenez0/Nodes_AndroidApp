@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NODES</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">fir-test-75a01</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fir-test-75a01</string>
+</resources>
