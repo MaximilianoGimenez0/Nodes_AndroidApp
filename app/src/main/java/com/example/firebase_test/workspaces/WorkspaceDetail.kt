@@ -96,7 +96,10 @@ fun WorkspaceDetailScreen(
         })
 
         MyChatScreen(
-            workspaceId, modifier = Modifier, workspacesViewModel, authViewModel = authViewModel
+            workspaceId,
+            modifier = Modifier,
+            workspacesViewModel,
+            authViewModel = authViewModel
         )
     }
 }

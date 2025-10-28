@@ -20,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.text.style.TextAlign
 
 enum class DialogType {
     NONE, CREATE_WORKSPACE, JOIN_WORKSPACE
@@ -77,7 +79,6 @@ fun WorkspacesControls(
         }
 
 
-
     }
 }
 
@@ -88,12 +89,28 @@ fun CreateWorkspaceDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
+
+    val maxLength = 25
+
     AlertDialog(onDismissRequest = onDismiss, title = { Text("Crear nuevo Workspace") }, text = {
         OutlinedTextField(
             value = workspaceName,
-            onValueChange = onNameChange,
+            onValueChange = {
+
+                if (it.length <= maxLength) {
+                    onNameChange(it)
+                }
+            },
             label = { Text("Nombre del Workspace") },
-            singleLine = true
+            singleLine = true,
+
+            supportingText = {
+                Text(
+                    text = "${workspaceName.length} / $maxLength",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.End
+                )
+            }
         )
     }, confirmButton = {
         Button(

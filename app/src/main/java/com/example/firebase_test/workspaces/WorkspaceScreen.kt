@@ -53,6 +53,7 @@ import androidx.navigation.NavController
 import com.example.firebase_test.R
 import com.example.firebase_test.viewmodels.WorkspacesViewModel
 import kotlinx.coroutines.launch
+
 @Composable
 fun WorkspacesScreen(
     contentController: NavController, workspacesViewModel: WorkspacesViewModel, modifier: Modifier
@@ -159,7 +160,8 @@ fun WorkspaceList_Grid(
 
 
             WorkspaceGridItem(
-                workspace = workspace, memberCount = memberCount,
+                workspace = workspace,
+                memberCount = memberCount,
                 onClick = { contentNavController.navigate("chat/${workspace.inviteCode}") })
         }
     }
@@ -167,8 +169,7 @@ fun WorkspaceList_Grid(
 
 @Composable
 fun WorkspaceGridItem(
-    workspace: Workspace, memberCount: Int,
-    onClick: () -> Unit
+    workspace: Workspace, memberCount: Int, onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier

@@ -27,9 +27,7 @@ enum class EntryType {
 
 data class ChecklistItem(
     val text: String = "",
-    @get:PropertyName("isChecked")
-    @set:PropertyName("isChecked")
-    var isChecked: Boolean = false
+    @get:PropertyName("isChecked") @set:PropertyName("isChecked") var isChecked: Boolean = false
 )
 
 data class WorkspaceEntry(

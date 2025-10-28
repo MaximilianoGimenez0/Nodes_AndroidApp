@@ -25,6 +25,8 @@ import com.example.firebase_test.pages.WorkspacesPage
 import com.example.firebase_test.pages.SettingsPage
 import com.example.firebase_test.viewmodels.AuthState
 import com.example.firebase_test.viewmodels.AuthViewModel
+import com.example.firebase_test.viewmodels.UserViewModel
+import com.example.firebase_test.viewmodels.UserViewModelFactory
 import com.example.firebase_test.viewmodels.WorkspacesViewModel
 import com.example.firebase_test.viewmodels.WorkspacesViewModelFactory
 import com.example.firebase_test.workspaces.WorkspaceDetailScreen
@@ -44,6 +46,10 @@ fun ContentNavigation(
 
     val firestore = Firebase.firestore
     val auth = Firebase.auth
+
+    val userViewmodel: UserViewModel = viewModel(
+        factory = UserViewModelFactory()
+    )
 
     val workspacesViewModel: WorkspacesViewModel = viewModel(
         factory = WorkspacesViewModelFactory(firestore, auth)
@@ -113,7 +119,11 @@ fun ContentNavigation(
 
             composable("settings") {
                 SettingsPage(
-                    modifier.padding(innerPadding), authViewModel, navController
+                    modifier.padding(innerPadding),
+                    authViewModel,
+                    navController,
+                    userViewmodel,
+                    contentNavController
                 )
             }
 

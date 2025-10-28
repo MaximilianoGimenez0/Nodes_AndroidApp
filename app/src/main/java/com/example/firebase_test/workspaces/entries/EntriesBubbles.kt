@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,21 +41,49 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun ProfileAvatar(userName: String) {
+fun ProfileAvatar(userName: String, profilePicture: String) {
     val initials = userName.take(1).uppercase()
-    Box(
-        modifier = Modifier
-            .size(40.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = initials,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+
+    val imageBitmap = remember(profilePicture) {
+        try {
+            val decodedBytes = Base64.decode(profilePicture, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)?.asImageBitmap()
+        } catch (e: Exception) {
+            Log.e("ImageBubble", "Error al decodificar Base64 a Bitmap", e)
+            null
+        }
+    }
+
+    if (imageBitmap != null) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                bitmap = imageBitmap,
+                contentDescription = "Foto de perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = initials,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -64,7 +93,7 @@ fun ImageBubble(
     userName: String,
     isFromCurrentUser: Boolean,
     date: Date?,
-    profilePicture: String // TODO -> Mostrar foto de perfil del usuario
+    profilePicture: String
 ) {
 
     val timeFormatter = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
@@ -99,7 +128,7 @@ fun ImageBubble(
         Row(verticalAlignment = Alignment.Top) {
 
             if (!isFromCurrentUser) {
-                ProfileAvatar(userName = userName)
+                ProfileAvatar(userName, profilePicture)
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
@@ -116,6 +145,7 @@ fun ImageBubble(
                 )
 
                 val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
                 Box(
                     modifier = Modifier
                         .widthIn(max = screenWidth * 0.75f)
@@ -161,7 +191,7 @@ fun ImageBubble(
 
             if (isFromCurrentUser) {
                 Spacer(modifier = Modifier.width(8.dp))
-                ProfileAvatar(userName = userName)
+                ProfileAvatar(userName, profilePicture)
             }
         }
     }
@@ -203,9 +233,10 @@ fun ChecklistBubble(
             .padding(vertical = 4.dp, horizontal = 8.dp),
         contentAlignment = if (isFromCurrentUser) Alignment.CenterEnd else Alignment.CenterStart
     ) {
-        Row(verticalAlignment = Alignment.Top, modifier = Modifier.width(200.dp)) {
+        Row(verticalAlignment = Alignment.Top) {
+
             if (!isFromCurrentUser) {
-                ProfileAvatar(userName = userName)
+                ProfileAvatar(userName, profilePicture)
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
@@ -216,61 +247,71 @@ fun ChecklistBubble(
                     text = if (isFromCurrentUser) "Yo" else userName,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 2.dp, start = 4.dp, end = 4.dp)
                 )
 
                 val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-                Surface(
-                    color = bubbleColor, shape = bubbleShape, shadowElevation = 1.dp
+
+                Box(
+                    modifier = Modifier
+                        .widthIn(max = screenWidth * 0.75f)
+                        .clip(bubbleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                            .widthIn(max = screenWidth * 0.75f)
+                    Surface(
+                        color = bubbleColor, shape = bubbleShape, shadowElevation = 1.dp
                     ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            text = title,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                                .widthIn(max = screenWidth * 0.75f) // Esto está bien
+                        ) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                text = title,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
 
-                        items.forEachIndexed { index, item ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(vertical = 2.dp)
-                            ) {
-                                Checkbox(
-                                    checked = item.isChecked,
+                            items.forEachIndexed { index, item ->
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(vertical = 2.dp)
+                                ) {
+                                    Checkbox(
+                                        checked = item.isChecked,
+                                        enabled = true,
+                                        onCheckedChange = { newCheckedState ->
+                                            onItemCheckedChange(index, newCheckedState)
+                                        })
 
-                                    enabled = true,
-
-                                    onCheckedChange = { newCheckedState ->
-                                        onItemCheckedChange(index, newCheckedState)
-                                    })
-
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = item.text, style = MaterialTheme.typography.bodyMedium
-                                )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = item.text,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
                             }
-                        }
 
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = timeString,
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.align(Alignment.End)
-                        )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = timeString,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.align(Alignment.End)
+                            )
+                        }
                     }
+
                 }
             }
 
             if (isFromCurrentUser) {
                 Spacer(modifier = Modifier.width(8.dp))
-                ProfileAvatar(userName = userName)
+                ProfileAvatar(userName, profilePicture)
             }
         }
     }
@@ -314,7 +355,7 @@ fun MessageBubble(
         Row(verticalAlignment = Alignment.Top) {
 
             if (!isFromCurrentUser) {
-                ProfileAvatar(userName = userName)
+                ProfileAvatar(userName, profilePicture)
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
@@ -354,7 +395,7 @@ fun MessageBubble(
 
             if (isFromCurrentUser) {
                 Spacer(modifier = Modifier.width(8.dp))
-                ProfileAvatar(userName = userName)
+                ProfileAvatar(userName, profilePicture)
             }
         }
     }
