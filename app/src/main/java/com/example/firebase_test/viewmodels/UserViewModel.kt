@@ -1,25 +1,30 @@
 package com.example.firebase_test.viewmodels
 
+import android.annotation.SuppressLint
+import android.app.Application // <-- 1. Importar Application
 import android.util.Log
+// 2. Importar AndroidViewModel y ViewModelProvider
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.firebase_test.repositories.UserRepository
+// 3. Importar tus recursos R
+import com.example.firebase_test.R
 import com.example.firebase_test.workspaces.UserProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import androidx.lifecycle.ViewModelProvider
-import com.example.firebase_test.workspaces.Workspace
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-/**
- * Esta es la Inyección de Dependencias Manual.
- * El ViewModel "declara" lo que necesita en su constructor.
- */
+
 class UserViewModel(
-    private val userRepository: UserRepository
-) : ViewModel() {
+    private val userRepository: UserRepository,
+    application: Application
+) : AndroidViewModel(application) {
+
+    @SuppressLint("StaticFieldLeak")
+    private val context = application.applicationContext
 
     private val _userInfo = MutableStateFlow<String?>(null)
     val userInfo: StateFlow<String?> = _userInfo.asStateFlow()
@@ -33,7 +38,6 @@ class UserViewModel(
 
     fun loadUserProfile(uid: String) {
         viewModelScope.launch {
-            // El ViewModel DELEGA el trabajo al repositorio
             val profile = userRepository.getUserProfile(uid)
             _userProfile.value = profile
         }
@@ -42,60 +46,58 @@ class UserViewModel(
     fun updateProfilePicture(uid: String, newPicture: String) {
         viewModelScope.launch {
             try {
-                // 1. Le pides al repositorio que actualice la base de datos
                 userRepository.updateUserPicture(uid, newPicture)
 
-                // 2. Si eso no falló, actualizas tu StateFlow localmente
                 _userProfile.update { currentUser ->
-                    // .copy() crea un nuevo UserProfile con solo el campo modificado
                     currentUser?.copy(profilePicture = newPicture)
                 }
 
-                // 3. Informas a la UI que todo salió bien
-                _userInfo.value = "Foto actualizada correctamente"
+                _userInfo.value = context.getString(R.string.profile_picture_update_success)
 
             } catch (e: Exception) {
                 Log.e("ViewModelError", "Error al actualizar la imagen: ${e.message}")
-                _userInfo.value = "Error al guardar: ${e.message}"
+
+                _userInfo.value = context.getString(
+                    R.string.workspace_generic_save_error, e.message ?: "Error"
+                )
             }
         }
     }
 
+    fun updateUserInfo(uid: String, FirstName: String, LastName: String) {
+        viewModelScope.launch {
+            try {
+                userRepository.updateUserInfo(uid, FirstName, LastName)
 
-    suspend fun getUser(uid: String): UserProfile? {
+                _userProfile.update { currentUser ->
+                    currentUser?.copy(firstName = FirstName, lastName = LastName)
+                }
 
-        return try {
-            userRepository.getUserProfile(uid)
-        } catch (e: Exception) {
-            Log.e("ViewModelError", "Error al cargar el usuario: ${e.message}")
-            _userInfo.value = "Error al cargar usuario: ${e.message}"
-            // 6. Retorna null en caso de error
-            null
+                _userInfo.value = context.getString(R.string.profile_data_update_success)
+
+            } catch (e: Exception) {
+                Log.e("ViewModelError", "Error al guardar los datos: ${e.message}")
+
+                _userInfo.value = context.getString(
+                    R.string.workspace_generic_save_error, e.message ?: "Error"
+                )
+            }
         }
     }
 
 }
 
+class UserViewModelFactory(
+    private val application: Application
+) : ViewModelProvider.Factory {
+    private val repository = UserRepository()
 
-/**
- * Esta clase es el "pegamento" de la Inyección Manual.
- * Su único trabajo es crear el UserViewModel.
- */
-class UserViewModelFactory() : ViewModelProvider.Factory {
-
-    val repository = UserRepository()
-
-    /**
-     * El sistema llamará a esta función cuando pida un ViewModel.
-     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        // Comprueba si el ViewModel que pide es el nuestro
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-
-            // Si es, lo crea "a mano" pasándole el repositorio
-            @Suppress("UNCHECKED_CAST") return UserViewModel(repository) as T
+            @Suppress("UNCHECKED_CAST")
+            return UserViewModel(repository, application) as T
         }
-        // Si no es un UserViewModel, lanza un error
+
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

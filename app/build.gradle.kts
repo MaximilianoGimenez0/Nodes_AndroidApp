@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
 
     val nav_version = "2.9.5"
 
@@ -54,8 +55,21 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
 
+    implementation("com.google.firebase:firebase-messaging")
+
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
+    implementation("androidx.lifecycle:lifecycle-process:2.8.3")
+
+    // Dependencia para obtener la ubicación del usuario
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+// (Verifica la última versión)
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Para Preferences DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     // Required only if Facebook login support is required
     // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
 
@@ -63,6 +77,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:${nav_version}")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

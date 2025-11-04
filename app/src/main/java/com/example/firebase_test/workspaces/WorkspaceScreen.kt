@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,6 +46,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+// AÑADIDAS
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+// ---
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -79,8 +84,9 @@ fun WorkspacesScreen(
     var workspaceCode by remember { mutableStateOf("") }
 
     Scaffold(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
             WorkspacesControls(
                 isFabMenuExpanded = isFabMenuExpanded,
@@ -155,9 +161,7 @@ fun WorkspaceList_Grid(
     ) {
         items(workspaces) { workspace ->
 
-
             val memberCount = workspace.members.size
-
 
             WorkspaceGridItem(
                 workspace = workspace,
@@ -210,12 +214,14 @@ fun WorkspaceGridItem(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Group,
-                        contentDescription = "Integrantes",
+                        contentDescription = stringResource(R.string.workspaces_item_members_icon_description),
                         modifier = Modifier.size(16.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "$memberCount ${if (memberCount == 1) "integrante" else "integrantes"}",
+                        text = pluralStringResource(
+                            R.plurals.workspaces_item_member_count, memberCount, memberCount
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -247,12 +253,11 @@ fun WorkspaceItemImage(
     if (imageBitmap != null) {
         Image(
             bitmap = imageBitmap,
-            contentDescription = "Foto del workspace",
+            contentDescription = stringResource(R.string.workspaces_item_image_description),
             contentScale = ContentScale.Crop,
             modifier = modifier.clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
         )
     } else {
-
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
@@ -261,7 +266,7 @@ fun WorkspaceItemImage(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.outline_gamepad_circle_right_24),
-                contentDescription = "Workspace sin imagen",
+                contentDescription = stringResource(R.string.workspaces_item_no_image_description),
                 tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.size(48.dp)
             )

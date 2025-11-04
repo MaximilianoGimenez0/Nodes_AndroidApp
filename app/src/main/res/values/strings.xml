@@ -1,7 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NODES</string>
 
-    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
-    <string name="facebook_application_id" translatable="false">fir-test-75a01</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fir-test-75a01</string>
+    <string name="app_name">NODES</string>
+    <string name="default_version">v1.0.0</string>
+
+    <string name="workspace_description">Mis nodos</string>
+
+    <string name="common_email">Email</string>
+    <string name="common_password">Contraseña</string>
+    <string name="common_firstname">Nombre</string>
+    <string name="common_lastname">Apellido</string>
+    <string name="common_show_password">Mostrar contraseña</string>
+    <string name="common_hide_password">Ocultar contraseña</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="back">Volver atrás</string>
+    <string name="gallery">Galería</string>
+    <string name="camera">Cámara</string>
+
+    <string name="common_cancel">Cancelar</string>
+
+    <string name="workspaces_fab_join_description">Unirse a un Nodo</string>
+    <string name="workspaces_fab_join_text">Unirse</string>
+    <string name="workspaces_fab_create_description">Crear nodo</string>
+    <string name="workspaces_fab_create_text">Crear</string>
+    <string name="workspaces_fab_menu_description">Menú de acciones</string>
+
+    <string name="create_workspace_dialog_title">Crear nuevo Nodo</string>
+    <string name="create_workspace_dialog_label">Nombre del Nodo</string>
+    <string name="create_workspace_dialog_confirm_button">Crear</string>
+
+    <string name="join_workspace_dialog_title">Unirse a un Nodo</string>
+    <string name="join_workspace_dialog_label">Código de invitación</string>
+    <string name="join_workspace_dialog_confirm_button">Unirse</string>
+
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="login_button_login">Login</string>
+    <string name="login_navigate_to_signup_link">No tengo una cuenta, registrarme</string>
+
+    <string name="signup_title">Registrarse</string>
+    <string name="signup_button_signup">Registrarse</string>
+    <string name="signup_navigate_to_login_link">Ya tengo una cuenta, iniciar sesión</string>
+
+    <string name="bottom_nav_home">Inicio</string>
+    <string name="bottom_nav_home_desc">Ir a Inicio</string>
+    <string name="bottom_nav_workspaces">Nodos</string>
+    <string name="bottom_nav_workspaces_desc">Ver tus nodos</string>
+    <string name="bottom_nav_profile">Configuración</string>
+    <string name="bottom_nav_profile_desc">Ver tu configuración</string>
+
+    <string name="home_title">NODES</string>
+    <string name="home_welcome_icon_desc">Bienvenida</string>
+    <string name="home_welcome_message">¡Hola, %1$s!</string>
+    <string name="home_subtitle">Tu espacio para conectar ideas y equipos.</string>
+    <string name="home_tips_header">Sácale provecho a NODES</string>
+    <string name="home_tip_brainstorm_title">Tip: Lluvia de Ideas</string>
+    <string name="home_tip_brainstorm_desc">Creá un \'Nodo\' solo para ideas. Invita a tu equipo y usen las notas para anotar todo sin filtros.</string>
+    <string name="home_tip_media_title">Feature: Comparte Multimedia</string>
+    <string name="home_tip_media_desc">Compartí imágenes o enviá tu ubicación en cualquier momento.</string>
+    <string name="home_tip_reminders_title">Caso de Uso: Establecer Recordatorios</string>
+    <string name="home_tip_reminders_desc">Usa un Nodo para establecer recordatorios importantes para tus actividades.</string>
+    <string name="home_tip_private_title">Feature: Notas Privadas</string>
+    <string name="home_tip_private_desc">Usa un Nodo de forma privada sin invitar a nadie, como tu diario personal, lista de compras o borrador de ideas.</string>
+    <string name="home_footer_version">NODES %1$s</string>
+
+    <string name="settings">Configuración</string>
+    <string name="logout">Cerrar Sesión</string>
+
+    <string name="profile_section">Mi Perfil</string>
+    <string name="profile_description">Tu nombre, apellido y correo asociados a esta cuenta.</string>
+    <string name="profile_pic_desc">Foto de perfil</string>
+    <string name="name_label">Name</string>
+    <string name="name_lastname">Last Name</string>
+    <string name="name_email">Email</string>
+    <string name="profile_pic_change_desc">Cambiar foto de perfil</string>
+    <string name="profile_pic_empty_desc">Perfil sin imagen</string>
+
+    <string name="profile_pic_change_title">Cambiar foto de perfil</string>
+    <string name="profile_pic_change_prompt">¿Desde dónde quieres seleccionar la imagen?</string>
+    <string name="application_section">Aplicación</string>
+    <string name="application_description">Personaliza el idioma, apariencia y texto de la app.</string>
+    <string name="language">Idioma</string>
+    <string name="theme">Tema de la aplicación</string>
+    <string name="theme_system">Automático (Sistema)</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="font_size">Tamaño de fuente</string>
+    <string name="font_small">Pequeña</string>
+    <string name="font_medium">Mediana</string>
+    <string name="font_large">Grande</string>
+
+    <string name="notifications_section">Notificaciones</string>
+    <string name="notifications_description">Elige si quieres recibir alertas y recordatorios.</string>
+    <string name="allow_notifications">Permitir notificaciones</string>
+    <string name="allow_exact_alarms">Permitir alarmas exactas</string>
+    <string name="allow_exact_alarms_desc">Requerido para que los recordatorios suenen a la hora exacta.</string>
+
+    <string name="checklist_dialog_title">Crear nueva lista</string>
+    <string name="checklist_dialog_list_title_label">Título de la lista</string>
+    <string name="checklist_dialog_delete_item_desc">Borrar ítem</string>
+    <string name="checklist_dialog_new_item_label">Nuevo ítem</string>
+    <string name="checklist_dialog_add_item_desc">Añadir ítem</string>
+
+    <string name="error_image">Error con la imagen</string>
+    <string name="permission_camera_denied">Permiso de cámara denado</string>
+
+    <string name="workspace_join_success">¡Te has unido al nodo!</string>
+    <string name="workspace_join_error">Error: No se pudo unir al nodo</string>
+    <string name="workspace_create_success">Nodo \'%1$s\' creado con éxito</string>
+    <string name="workspace_create_error">Error: No se pudo crear el nodo</string>
+    <string name="workspace_entry_add_error">Error al enviar el mensaje</string>
+    <string name="workspace_delete_auth_error">Error: Debes estar logueado para eliminar</string>
+    <string name="workspace_delete_entry_success">Entrada eliminada</string>
+    <string name="workspace_delete_entry_error">Error al eliminar la entrada</string>
+    <string name="workspace_category_update_success">Categoría \'%1$s\' añadida</string>
+    <string name="workspace_category_update_error">Error al actualizar la categoría</string>
+    <string name="workspace_checklist_update_error">Error al actualizar la tarea</string>
+    <string name="workspace_name_update_success">Nombre actualizado con éxito</string>
+    <string name="workspace_picture_update_success">Imagen actualizada con éxito</string>
+    <string name="workspace_generic_save_error">Error al guardar: %1$s</string>
+    <string name="workspace_location_error">Error al obtener ubicación</string>
+    <string name="workspace_unauthenticated_error">Usuario no autenticado</string>
+    <string name="workspace_load_data_error">Error al cargar datos</string>
+    <string name="workspace_location_shared">Ubicación Compartida</string>
+
+    <string name="profile_picture_update_success">Foto actualizada correctamente</string>
+    <string name="profile_data_update_success">Datos actualizados correctamente</string>
+    <string name="profile_load_user_error">Error al cargar usuario: %1$s</string>
+
+    <string name="auth_error_empty_fields">El email o la contraseña no pueden estar vacíos</string>
+    <string name="auth_error_unknown">Algo salió mal</string>
+    <string name="auth_error_save_profile">Error al guardar perfil: %1$s</string>
+
+
+    <string name="common_loading">Cargando...</string>
+    <string name="common_back">Volver atrás</string>
+    <string name="common_not_available">N/A</string>
+    <string name="common_gallery">Galería</string>
+    <string name="common_camera">Cámara</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_name">Nombre</string>
+    <string name="common_profile_picture_description">Foto de perfil</string>
+    <string name="common_user_no_image_description">Usuario sin imagen</string>
+    <string name="common_date_not_available">Fecha no disponible</string>
+    <string name="common_created_on">Creado el: %1$s</string>
+    <string name="common_date_format_long">dd \'de\' MMMM \'de\' yyyy</string>
+
+    <string name="workspace_detail_info_description">Información del Nodo</string>
+
+    <string name="workspace_detail_image_process_error">Error al procesar la imagen</string>
+    <string name="workspace_detail_photo_process_error">Error al procesar la foto</string>
+    <string name="workspace_detail_camera_permission_denied">Permiso de cámara denegado</string>
+    <string name="workspace_detail_info_title">Información del Nodo</string>
+    <string name="workspace_detail_back_to_chat_description">Volver al chat</string>
+    <string name="workspace_detail_change_name_description">Cambiar nombre</string>
+    <string name="workspace_detail_invite_code_label">Código de Invitación</string>
+    <string name="workspace_detail_members_label">Miembros (%1$d)</string>
+    <string name="workspace_detail_change_picture_title">Cambiar foto de perfil</string>
+    <string name="workspace_detail_change_picture_prompt">¿Desde dónde quieres seleccionar la imagen?</string>
+
+    <string name="workspace_detail_picture_description">Foto de perfil del Nodo</string>
+    <string name="workspace_detail_no_image_description">Nodo sin imagen</string>
+
+    <string name="dialog_change_name_title">Ingresá un nuevo nombre</string>
+
+    <string name="workspaces_item_members_icon_description">Integrantes</string>
+    <plurals name="workspaces_item_member_count">
+        <item quantity="one">%1$d integrante</item>
+        <item quantity="other">%1$d integrantes</item>
+    </plurals>
+
+    <string name="workspaces_item_image_description">Foto del nodo</string>
+    <string name="workspaces_item_no_image_description">nodo sin imagen</string>
+
+    <string name="map_screen_title">Ubicación</string>
+    <string name="map_screen_marker_title">Ubicación Compartida</string>
+
+    <string name="create_message_dialog_title">Escribir una nota</string>
+    <string name="create_message_dialog_label">Nota</string>
+
+
+    <string name="chat_user_me">Yo</string>
+    <string name="chat_image_description">Imagen de chat</string>
+    <string name="chat_category_label">Categoría</string>
+    <string name="chat_image_save_success">Imagen guardada</string>
+    <string name="chat_image_save_error">Error al guardar</string>
+    <string name="chat_image_download_description">Descargar imagen</string>
+    <string name="chat_image_load_error">Error al cargar imagen</string>
+    <string name="chat_location_icon_description">Ubicación</string>
+    <string name="chat_reminder_default_title">Recordatorio</string>
+    <string name="chat_reminder_invalid_time">Hora no válida</string>
+    <string name="chat_reminder_alarm_icon_description">Alarma</string>
+    <string name="chat_reminder_date_format">EEE dd \'de\' MMMM, HH:mm</string>
+    <string name="chat_timestamp_format">HH:mm</string>
+    <string name="chat_timestamp_placeholder">--:--</string>
+
+    <string name="chat_anonymous_user">Anónimo</string>
+    <string name="chat_getting_location">Obteniendo ubicación...</string>
+    <string name="chat_permission_location_denied">Permiso de ubicación denegado.</string>
+    <string name="chat_add_image_title">Añadir imagen</string>
+    <string name="chat_share_location_title">Compartir Ubicación</string>
+    <string name="chat_share_location_prompt">¿Confirmas que quieres compartir tu ubicación actual?</string>
+    <string name="chat_entry_options_title">Opciones de entrada</string>
+    <string name="chat_entry_option_add_category">Agregar categoría</string>
+    <string name="chat_entry_option_delete">Eliminar entrada</string>
+    <string name="common_close">Cerrar</string>
+    <string name="chat_assign_category_title">Asignar Categoría</string>
+    <string name="chat_category_name_label">Nombre de la categoría</string>
+
+    <string name="reminder_dialog_title">Nuevo Recordatorio</string>
+    <string name="reminder_dialog_label">Título del recordatorio</string>
+    <string name="reminder_dialog_select_time_button">Seleccionar hora: %1$s</string>
+
+    <string name="time_picker_dialog_title">Seleccionar hora</string>
+    <string name="common_accept">Aceptar</string>
 </resources>

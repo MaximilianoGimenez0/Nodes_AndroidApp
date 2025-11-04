@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NODES</string>
+    <string name="default_version">v1.0.0</string>
+
+    <string name="workspace_description">Meus Nós</string>
+
+    <string name="common_email">E-mail</string>
+    <string name="common_password">Senha</string>
+    <string name="common_firstname">Nome</string>
+    <string name="common_lastname">Sobrenome</string>
+    <string name="common_show_password">Mostrar senha</string>
+    <string name="common_hide_password">Ocultar senha</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="back">Voltar</string>
+    <string name="gallery">Galeria</string>
+    <string name="camera">Câmera</string>
+
+
+    <string name="common_cancel">Cancelar</string>
+
+    <string name="workspaces_fab_join_description">Entrar no Nó</string>
+    <string name="workspaces_fab_join_text">Entrar</string>
+    <string name="workspaces_fab_create_description">Criar Nó</string>
+    <string name="workspaces_fab_create_text">Criar</string>
+    <string name="workspaces_fab_menu_description">Menu de ações</string>
+
+    <string name="create_workspace_dialog_title">Criar novo Nó</string>
+    <string name="create_workspace_dialog_label">Nome do Nó</string>
+    <string name="create_workspace_dialog_confirm_button">Criar</string>
+
+    <string name="join_workspace_dialog_title">Entrar em um Nó</string>
+    <string name="join_workspace_dialog_label">Código de convite</string>
+    <string name="join_workspace_dialog_confirm_button">Entrar</string>
+
+
+    <string name="login_title">Entrar</string>
+    <string name="login_button_login">Login</string>
+    <string name="login_navigate_to_signup_link">Não tenho uma conta, cadastre-se</string>
+
+    <string name="signup_title">Cadastre-se</string>
+    <string name="signup_button_signup">Cadastrar</string>
+    <string name="signup_navigate_to_login_link">Já tenho uma conta, entrar</string>
+
+    <string name="bottom_nav_home">Início</string>
+    <string name="bottom_nav_home_desc">Ir para o início</string>
+    <string name="bottom_nav_workspaces">Nós</string>
+    <string name="bottom_nav_workspaces_desc">Ver seus nós</string>
+    <string name="bottom_nav_profile">Configurações</string>
+    <string name="bottom_nav_profile_desc">Ver suas configurações</string>
+
+    <string name="home_title">NODES</string>
+    <string name="home_welcome_icon_desc">Boas-vindas</string>
+    <string name="home_welcome_message">Olá, %1$s!</string>
+    <string name="home_subtitle">Seu espaço para conectar ideias e equipes.</string>
+    <string name="home_tips_header">Aproveite ao máximo o NODES</string>
+    <string name="home_tip_brainstorm_title">Dica: Brainstorming</string>
+    <string name="home_tip_brainstorm_desc">Crie um \'Nó\' apenas para ideias. Convide sua equipe e use as notas para anotar tudo sem filtros.</string>
+    <string name="home_tip_media_title">Recurso: Compartilhe Mídia</string>
+    <string name="home_tip_media_desc">Compartilhe imagens ou envie sua localização a qualquer momento.</string>
+    <string name="home_tip_reminders_title">Caso de Uso: Definir Lembretes</string>
+    <string name="home_tip_reminders_desc">Use um Nó para definir lembretes importantes para suas atividades.</string>
+    <string name="home_tip_private_title">Recurso: Notas Privadas</string>
+    <string name="home_tip_private_desc">Use um Nó de forma privada sem convidar ninguém, como seu diário pessoal, lista de compras ou rascunho de ideias.</string>
+    <string name="home_footer_version">NODES %1$s</string>
+
+    <string name="settings">Configurações</string>
+    <string name="logout">Sair</string>
+
+    <string name="profile_section">Meu Perfil</string>
+    <string name="profile_description">Seu nome, sobrenome e e-mail associados a esta conta.</string>
+    <string name="name_label">Nome</string>
+    <string name="name_lastname">Sobrenome</string>
+    <string name="name_email">Email</string>
+    <string name="profile_pic_desc">Foto de perfil</string>
+    <string name="profile_pic_change_desc">Alterar foto de perfil</string>
+    <string name="profile_pic_empty_desc">Perfil sem imagem</string>
+
+    <string name="profile_pic_change_title">Alterar foto de perfil</string>
+    <string name="profile_pic_change_prompt">De onde você deseja selecionar a imagem?</string>
+
+    <string name="application_section">Aplicativo</string>
+    <string name="application_description">Personalize o idioma, a aparência e o texto do aplicativo.</string>
+    <string name="language">Idioma</string>
+    <string name="theme">Tema do aplicativo</string>
+    <string name="theme_system">Automático (Sistema)</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="font_size">Tamanho da fonte</string>
+    <string name="font_small">Pequena</string>
+    <string name="font_medium">Média</string>
+    <string name="font_large">Grande</string>
+
+    <string name="notifications_section">Notificações</string>
+    <string name="notifications_description">Escolha quais alertas e lembretes você deseja receber.</string>
+    <string name="allow_notifications">Permitir notificações</string>
+    <string name="allow_exact_alarms">Permitir alarmes exatos</string>
+    <string name="allow_exact_alarms_desc">Necessário para que os lembretes toquem na hora exata.</string>
+
+    <string name="checklist_dialog_title">Criar nova lista</string>
+    <string name="checklist_dialog_list_title_label">Título da lista</string>
+    <string name="checklist_dialog_delete_item_desc">Excluir item</string>
+    <string name="checklist_dialog_new_item_label">Novo item</string>
+    <string name="checklist_dialog_add_item_desc">Adicionar item</string>
+
+    <string name="error_image">Erro com a imagem</string>
+    <string name="permission_camera_denied">Permissão da câmera negada</string>
+
+    <string name="workspace_join_success">Entrou no Nó!</string>
+    <string name="workspace_join_error">Erro: Não foi possível entrar no nó</string>
+    <string name="workspace_create_success">Nó \'%1$s\' criado com sucesso</string>
+    <string name="workspace_create_error">Erro: Não foi possível criar o nó</string>
+    <string name="workspace_entry_add_error">Erro ao enviar a mensagem</string>
+    <string name="workspace_delete_auth_error">Erro: Você deve estar logado para excluir</string>
+    <string name="workspace_delete_entry_success">Entrada excluída</string>
+    <string name="workspace_delete_entry_error">Erro ao excluir a entrada</string>
+    <string name="workspace_category_update_success">Categoria \'%1$s\' adicionada</string>
+    <string name="workspace_category_update_error">Erro ao atualizar a categoria</string>
+    <string name="workspace_checklist_update_error">Erro ao atualizar a tarefa</string>
+    <string name="workspace_name_update_success">Nome atualizado com sucesso</string>
+    <string name="workspace_picture_update_success">Imagem atualizada com sucesso</string>
+    <string name="workspace_generic_save_error">Erro ao salvar: %1$s</string>
+    <string name="workspace_location_error">Erro ao obter localização</string>
+    <string name="workspace_unauthenticated_error">Usuário não autenticado</string>
+    <string name="workspace_load_data_error">Erro ao carregar dados</string>
+    <string name="workspace_location_shared">Localização Compartilhada</string>
+
+    <string name="profile_picture_update_success">Foto atualizada com sucesso</string>
+    <string name="profile_data_update_success">Dados atualizados com sucesso</string>
+    <string name="profile_load_user_error">Erro ao carregar usuário: %1$s</string>
+
+    <string name="auth_error_empty_fields">E-mail ou senha não podem estar vazios</string>
+    <string name="auth_error_unknown">Algo deu errado</string>
+    <string name="auth_error_save_profile">Erro ao salvar perfil: %1$s</string>
+
+
+    <string name="common_loading">Carregando...</string>
+    <string name="common_back">Voltar</string>
+    <string name="common_not_available">N/A</string>
+    <string name="common_gallery">Galeria</string>
+    <string name="common_camera">Câmera</string>
+    <string name="common_save">Salvar</string>
+    <string name="common_name">Nome</string>
+    <string name="common_profile_picture_description">Foto de perfil</string>
+    <string name="common_user_no_image_description">Usuário sem imagem</string>
+    <string name="common_date_not_available">Data indisponível</string>
+    <string name="common_created_on">Criado em: %1$s</string>
+    <string name="common_date_format_long">dd \'de\' MMMM \'de\' yyyy</string>
+
+    <string name="workspace_detail_info_description">Informações do Nó</string>
+
+    <string name="workspace_detail_image_process_error">Erro ao processar a imagem</string>
+    <string name="workspace_detail_photo_process_error">Erro ao processar a foto</string>
+    <string name="workspace_detail_camera_permission_denied">Permissão da câmera negada</string>
+    <string name="workspace_detail_info_title">Informações do Nó</string>
+    <string name="workspace_detail_back_to_chat_description">Voltar ao chat</string>
+    <string name="workspace_detail_change_name_description">Mudar nome</string>
+    <string name="workspace_detail_invite_code_label">Código de Convite</string>
+    <string name="workspace_detail_members_label">Membros (%1$d)</string>
+    <string name="workspace_detail_change_picture_title">Mudar foto de perfil</string>
+    <string name="workspace_detail_change_picture_prompt">De onde você quer selecionar a imagem?</string>
+
+    <string name="workspace_detail_picture_description">Foto de perfil do nó</string>
+    <string name="workspace_detail_no_image_description">Nó sem imagem</string>
+
+    <string name="dialog_change_name_title">Digite um novo nome</string>
+
+
+    <string name="workspaces_item_members_icon_description">Membros</string>
+    <plurals name="workspaces_item_member_count">
+        <item quantity="one">%1$d membro</item>
+        <item quantity="other">%1$d membros</item>
+    </plurals>
+
+    <string name="workspaces_item_image_description">Foto do nó</string>
+    <string name="workspaces_item_no_image_description">Nó sem imagem</string>
+
+    <string name="map_screen_title">Localização</string>
+    <string name="map_screen_marker_title">Localização Compartilhada</string>
+
+    <string name="create_message_dialog_title">Escrever uma nota</string>
+    <string name="create_message_dialog_label">Nota</string>
+
+
+    <string name="chat_user_me">Eu</string>
+    <string name="chat_image_description">Imagem do chat</string>
+    <string name="chat_category_label">Categoria</string>
+    <string name="chat_image_save_success">Imagem salvada</string>
+    <string name="chat_image_save_error">Erro ao salvar</string>
+    <string name="chat_image_download_description">Baixar imagem</string>
+    <string name="chat_image_load_error">Erro ao carregar imagem</string>
+    <string name="chat_location_icon_description">Localização</string>
+    <string name="chat_reminder_default_title">Lembrete</string>
+    <string name="chat_reminder_invalid_time">Hora inválida</string>
+    <string name="chat_reminder_alarm_icon_description">Alarme</string>
+    <string name="chat_reminder_date_format">EEE, dd \'de\' MMMM, HH:mm</string>
+    <string name="chat_timestamp_format">HH:mm</string>
+    <string name="chat_timestamp_placeholder">--:--</string>
+
+
+    <string name="chat_anonymous_user">Anônimo</string>
+    <string name="chat_getting_location">Obtendo localização...</string>
+    <string name="chat_permission_location_denied">Permissão de localização negada.</string>
+    <string name="chat_add_image_title">Adicionar imagem</string>
+    <string name="chat_share_location_title">Compartilhar Localização</string>
+    <string name="chat_share_location_prompt">Você confirma que deseja compartilhar sua localização atual?</string>
+    <string name="chat_entry_options_title">Opções da entrada</string>
+    <string name="chat_entry_option_add_category">Adicionar categoria</string>
+    <string name="chat_entry_option_delete">Excluir entrada</string>
+    <string name="common_close">Fechar</string>
+    <string name="chat_assign_category_title">Atribuir Categoria</string>
+    <string name="chat_category_name_label">Nome da categoria</string>
+
+    <string name="reminder_dialog_title">Novo Lembrete</string>
+    <string name="reminder_dialog_label">Título do lembrete</string>
+    <string name="reminder_dialog_select_time_button">Selecionar hora: %1$s</string>
+
+    <string name="time_picker_dialog_title">Selecionar hora</string>
+    <string name="common_accept">Aceitar</string>
+</resources>

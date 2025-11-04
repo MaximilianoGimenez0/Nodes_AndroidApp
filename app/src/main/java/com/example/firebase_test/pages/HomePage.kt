@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,14 +48,26 @@ import androidx.navigation.NavController
 import com.example.firebase_test.viewmodels.AuthState
 import com.example.firebase_test.viewmodels.AuthViewModel
 import androidx.compose.runtime.collectAsState
+import com.example.firebase_test.RequestNotificationPermission
+// --- IMPORTS AÑADIDOS ---
+import androidx.compose.ui.res.stringResource
+import com.example.firebase_test.R
+
 
 @Composable
-fun HomePage(modifier: Modifier, authViewmodel: AuthViewModel, navController: NavController) {
+fun HomePage(
+    modifier: Modifier,
+    authViewmodel: AuthViewModel,
+    navController: NavController,
+    contentNavController: NavController
+) {
 
     val authState = authViewmodel.authState.observeAsState()
     val currentUser = authViewmodel.userProfile.collectAsState()
     val context = LocalContext.current
     val appVersion = remember { getAppVersion(context) }
+
+    RequestNotificationPermission()
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
@@ -71,16 +85,15 @@ fun HomePage(modifier: Modifier, authViewmodel: AuthViewModel, navController: Na
 
         val userName = currentUser.value?.firstName?.split(" ")?.firstOrNull() ?: "Usuario"
 
-        HomeVariant6_Hybrid(
+        Greetings(
             modifier = modifier,
             userName = userName,
             appVersion = appVersion,
             navController = navController
         )
 
-
     } else {
-        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }
@@ -88,36 +101,39 @@ fun HomePage(modifier: Modifier, authViewmodel: AuthViewModel, navController: Na
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeVariant6_Hybrid(
+fun Greetings(
     modifier: Modifier, userName: String, appVersion: String, navController: NavController
 ) {
     val inspirationTips = listOf(
         Triple(
             Icons.Filled.Lightbulb,
-            "Tip: Lluvia de Ideas",
-            "Crea un 'Workspace' solo para ideas. Invita a tu equipo y usen las notas para capturar todo sin filtros."
+            stringResource(R.string.home_tip_brainstorm_title),
+            stringResource(R.string.home_tip_brainstorm_desc)
         ), Triple(
             Icons.Filled.PhotoCamera,
-            "Feature: Comparte Multimedia",
-            "Arrastra imágenes, envía tu ubicación o graba audios directamente en cualquier 'Nodo' o chat."
+            stringResource(R.string.home_tip_media_title),
+            stringResource(R.string.home_tip_media_desc)
         ), Triple(
-            Icons.Filled.Description,
-            "Caso de Uso: Planear Viajes",
-            "Usa un 'Nodo' para tu próximo viaje. Guarda links, PDFs de reservas y fotos de referencia."
+            Icons.Filled.NotificationsActive,
+            stringResource(R.string.home_tip_reminders_title),
+            stringResource(R.string.home_tip_reminders_desc)
         ), Triple(
             Icons.AutoMirrored.Filled.Notes,
-            "Feature: Notas Privadas",
-            "Usa la sección 'Mis Notas' (que es privada) como tu diario personal, lista de compras o borrador de ideas."
+            stringResource(R.string.home_tip_private_title),
+            stringResource(R.string.home_tip_private_desc)
         )
     )
 
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             TopAppBar(
-                title = { Text("NODES", fontWeight = FontWeight.Bold) })
+                title = { Text(stringResource(R.string.home_title), fontWeight = FontWeight.Bold) })
         }) { paddingValues ->
+
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
             contentPadding = PaddingValues(16.dp),
@@ -134,17 +150,17 @@ fun HomeVariant6_Hybrid(
                 ) {
                     Icon(
                         Icons.Filled.AutoAwesome,
-                        contentDescription = "Bienvenida",
+                        contentDescription = stringResource(R.string.home_welcome_icon_desc),
                         modifier = Modifier.size(64.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        "¡Hola, $userName!",
+                        stringResource(R.string.home_welcome_message, userName),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        "Tu espacio para conectar ideas y equipos.",
+                        stringResource(R.string.home_subtitle),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -155,7 +171,7 @@ fun HomeVariant6_Hybrid(
 
             item {
                 Text(
-                    "Sácale provecho a NODES",
+                    stringResource(R.string.home_tips_header),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
@@ -187,10 +203,8 @@ fun InspirationCard(icon: ImageVector, title: String, description: String) {
             modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.Top
         ) {
             Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(32.dp),
-                tint = MaterialTheme.colorScheme.primary
+                imageVector = icon, contentDescription = null,
+                modifier = Modifier.size(32.dp), tint = MaterialTheme.colorScheme.primary
             )
             Spacer(Modifier.width(16.dp))
             Column {
@@ -216,7 +230,7 @@ fun AppVersionFooter(appVersion: String, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "NODES $appVersion",
+            text = stringResource(R.string.home_footer_version, appVersion),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -237,6 +251,6 @@ fun getAppVersion(context: Context): String {
             }
         "v${packageInfo.versionName}"
     } catch (e: Exception) {
-        "v1.0.0"
+        context.getString(R.string.default_version)
     }
 }

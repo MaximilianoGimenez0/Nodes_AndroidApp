@@ -1,5 +1,6 @@
 package com.example.firebase_test.workspaces
 
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
@@ -33,15 +34,18 @@ data class ChecklistItem(
 data class WorkspaceEntry(
     val id: String = "",
     @ServerTimestamp val createdAt: Date? = null,
-    val value: String = "",
+    val value: String? = "",
     val userId: String = "",
     val name: String = "",
     val profilePicture: String = "",
-    val items: List<ChecklistItem> = emptyList(),
-    val type: EntryType = EntryType.NONE
+    val items: List<ChecklistItem>? = emptyList(),
+    val type: EntryType = EntryType.NONE,
+    val location: GeoPoint? = null,
+    val category: String? = null,
 )
 
 data class UserProfile(
+    val id: String = "",
     val firstName: String = "",
     val lastName: String = "",
     val email: String = "",

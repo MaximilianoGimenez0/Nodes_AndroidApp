@@ -1,19 +1,26 @@
 package com.example.firebase_test.viewmodels
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.firebase_test.R
 import com.example.firebase_test.workspaces.ChecklistItem
 import com.example.firebase_test.workspaces.EntryType
 import com.example.firebase_test.workspaces.UserProfile
 import com.example.firebase_test.workspaces.Workspace
 import com.example.firebase_test.workspaces.WorkspaceEntry
 import com.example.firebase_test.workspaces.WorkspacesUiState
+import com.google.android.gms.location.LocationServices
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,12 +28,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.firestore
 
+@SuppressLint("StaticFieldLeak")
 class WorkspacesViewModel(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val workspaceRepository: WorkspaceRepository
-) : ViewModel() {
+    private val workspaceRepository: WorkspaceRepository,
+    application: Application
+) : AndroidViewModel(application) {
+
+    private val context = application.applicationContext
 
     private val _workspaceMembers = MutableStateFlow<List<UserProfile>>(emptyList())
     val workspaceMembers: StateFlow<List<UserProfile>> = _workspaceMembers.asStateFlow()
@@ -47,13 +59,9 @@ class WorkspacesViewModel(
     private var workspaceListener: ListenerRegistration? = null
 
     fun loadWorkspaceDetails(workspaceId: String) {
-
         workspaceListener?.remove()
-
         _selectedWorkspace.value = null
-
         _workspaceMembers.value = emptyList()
-
         val docRef = firestore.collection("workspaces").document(workspaceId)
 
         workspaceListener = docRef.addSnapshotListener { snapshot, error ->
@@ -100,7 +108,13 @@ class WorkspacesViewModel(
     private fun loadWorkspaces() {
         val userId = auth.currentUser?.uid
         if (userId == null) {
-            _uiState.update { it.copy(error = "Usuario no autenticado", isLoading = false) }
+            // 👇 CAMBIO
+            _uiState.update {
+                it.copy(
+                    error = context.getString(R.string.workspace_unauthenticated_error),
+                    isLoading = false
+                )
+            }
             return
         }
 
@@ -110,7 +124,12 @@ class WorkspacesViewModel(
             .addSnapshotListener { snapshots, error ->
 
                 if (error != null) {
-                    _uiState.update { it.copy(error = "Error al cargar datos", isLoading = false) }
+                    _uiState.update {
+                        it.copy(
+                            error = context.getString(R.string.workspace_load_data_error),
+                            isLoading = false
+                        )
+                    }
                     return@addSnapshotListener
                 }
 
@@ -130,9 +149,9 @@ class WorkspacesViewModel(
         val workspaceRef = firestore.collection("workspaces").document(workspaceId)
 
         workspaceRef.update("members", FieldValue.arrayUnion(userId)).addOnSuccessListener {
-            _userInfo.value = "¡Te has unido al workspace!"
+            _userInfo.value = context.getString(R.string.workspace_join_success)
         }.addOnFailureListener { e ->
-            _userInfo.value = "Error: No se pudo unir al workspace"
+            _userInfo.value = context.getString(R.string.workspace_join_error)
             println("Error al intentar unirse al workspace: $e")
         }
     }
@@ -156,11 +175,12 @@ class WorkspacesViewModel(
 
             db.collection("workspaces").document(newWorkspaceId).set(newWorkspace).await()
 
-            _userInfo.value = "Workspace '${newWorkspace.name}' creado con éxito"
+            _userInfo.value =
+                context.getString(R.string.workspace_create_success, newWorkspace.name)
             println("Firestore: ¡Workspace '${newWorkspace.name}' creado con éxito con ID: $newWorkspaceId!")
 
         } catch (e: Exception) {
-            _userInfo.value = "Error: No se pudo crear el workspace"
+            _userInfo.value = context.getString(R.string.workspace_create_error)
             println("Firestore: Error al crear el workspace: $e")
         }
     }
@@ -198,11 +218,12 @@ class WorkspacesViewModel(
 
     fun addWorkspaceEntry(
         workspaceId: String,
-        value: String,
+        value: String? = null,
         type: EntryType,
         name: String,
         profilePicture: String,
-        items: List<ChecklistItem> = emptyList()
+        items: List<ChecklistItem>? = emptyList(),
+        location: GeoPoint? = null
     ) {
         val currentUserId = auth.currentUser?.uid
         if (currentUserId == null) {
@@ -217,6 +238,7 @@ class WorkspacesViewModel(
             profilePicture = profilePicture,
             items = items,
             userId = currentUserId,
+            location = location,
             createdAt = null
         )
 
@@ -230,17 +252,62 @@ class WorkspacesViewModel(
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error al añadir la entry a $workspaceId", e)
-                _userInfo.value = "Error al enviar el mensaje"
+                _userInfo.value = context.getString(R.string.workspace_entry_add_error)
             }
         }
     }
 
 
+    fun deleteWorkspaceEntry(workspaceId: String, entryId: String) {
+        val currentUserId = auth.currentUser?.uid
+        if (currentUserId == null) {
+            Log.e(TAG, "No se puede eliminar, usuario no logueado.")
+            _userInfo.value = context.getString(R.string.workspace_delete_auth_error)
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                firestore.collection("workspaces").document(workspaceId).collection("entries")
+                    .document(entryId).delete().await()
+
+                _userInfo.value = context.getString(R.string.workspace_delete_entry_success)
+                Log.d(TAG, "Entry $entryId eliminada de $workspaceId.")
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error al eliminar la entry $entryId de $workspaceId", e)
+                _userInfo.value = context.getString(R.string.workspace_delete_entry_error)
+            }
+        }
+    }
+
+    fun updateEntryCategory(workspaceId: String, entryId: String, newCategory: String) {
+        viewModelScope.launch {
+            try {
+                firestore.collection("workspaces").document(workspaceId).collection("entries")
+                    .document(entryId).update("category", newCategory).await()
+
+                _userInfo.value =
+                    context.getString(R.string.workspace_category_update_success, newCategory)
+                Log.d(TAG, "Categoría actualizada para entry $entryId.")
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error al actualizar la categoría", e)
+                _userInfo.value = context.getString(R.string.workspace_category_update_error)
+            }
+        }
+    }
+
     private var entriesListener: ListenerRegistration? = null
     private val _workspaceEntries = MutableStateFlow<List<WorkspaceEntry>>(emptyList())
     val workspaceEntries: StateFlow<List<WorkspaceEntry>> = _workspaceEntries.asStateFlow()
 
+    private val _availableCategories = MutableStateFlow<List<String>>(emptyList())
+    val availableCategories: StateFlow<List<String>> = _availableCategories.asStateFlow()
+
+
     fun loadWorkspaceEntries(workspaceId: String) {
+
         entriesListener?.remove()
 
         val entriesRef =
@@ -263,11 +330,18 @@ class WorkspacesViewModel(
                 }
 
                 _workspaceEntries.value = entries
+
+                _availableCategories.value =
+                    entries.mapNotNull { it.category }.filter { it.isNotBlank() }.distinct()
+                        .sorted()
+
+
             } else {
                 _workspaceEntries.value = emptyList()
             }
         }
     }
+
 
     private fun loadWorkspaceMembers(memberIds: List<String>) {
 
@@ -313,7 +387,23 @@ class WorkspacesViewModel(
                     return@launch
                 }
 
-                val newItemsList = currentEntry.items.toMutableList()
+                val currentItemsList = currentEntry.items as? List<ChecklistItem>
+
+                if (currentItemsList == null) {
+                    Log.e(
+                        TAG,
+                        "Error: La entry $entryId no es una checklist o sus items no son una lista."
+                    )
+                    return@launch
+                }
+
+                val newItemsList = currentItemsList.toMutableList()
+
+                if (itemIndex < 0 || itemIndex >= newItemsList.size) {
+                    Log.e(TAG, "Error: Índice $itemIndex está fuera de rango.")
+                    return@launch
+                }
+
                 val itemToUpdate = newItemsList[itemIndex]
                 newItemsList[itemIndex] = itemToUpdate.copy(isChecked = newCheckedState)
 
@@ -323,7 +413,7 @@ class WorkspacesViewModel(
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error al actualizar el checklist item", e)
-                _userInfo.value = "Error al actualizar la tarea"
+                _userInfo.value = context.getString(R.string.workspace_checklist_update_error)
             }
         }
     }
@@ -355,11 +445,14 @@ class WorkspacesViewModel(
                     _selectedWorkspace.value = workspaceActualizado
                 }
 
-                _userInfo.value = "Nombre actualizado con éxito!"
+                _userInfo.value = context.getString(R.string.workspace_name_update_success)
 
             } catch (e: Exception) {
                 Log.e("ViewModelError", "Error al actualizar nombre: ${e.message}")
-                _userInfo.value = "Error al guardar: ${e.message}"
+
+                _userInfo.value = context.getString(
+                    R.string.workspace_generic_save_error, e.message ?: "Error desconocido"
+                )
             }
         }
     }
@@ -389,29 +482,57 @@ class WorkspacesViewModel(
                     _selectedWorkspace.value = workspaceActualizado
                 }
 
-                _userInfo.value = "Imagen actualizada con éxito!"
+                _userInfo.value = context.getString(R.string.workspace_picture_update_success)
 
             } catch (e: Exception) {
                 Log.e("ViewModelError", "Error al actualizar la imagen: ${e.message}")
-                _userInfo.value = "Error al guardar: ${e.message}"
+
+                _userInfo.value = context.getString(
+                    R.string.workspace_generic_save_error, e.message ?: "Error desconocido"
+                )
             }
         }
     }
 
+    fun shareCurrentLocation(workspaceId: String, name: String, profilePicture: String) {
+        viewModelScope.launch {
+            workspaceRepository.fetchCurrentLocation(onSuccess = { geoPoint ->
 
+                addWorkspaceEntry(
+                    workspaceId = workspaceId,
+                    type = EntryType.LOCALIZATION,
+                    name = name,
+                    profilePicture = profilePicture,
+                    location = geoPoint,
+                    value = context.getString(R.string.workspace_location_shared)
+                )
+
+            }, onFailure = { exception ->
+                Log.e("LocationError", "Error al obtener ubicación: ${exception.message}")
+
+                _userInfo.value = context.getString(R.string.workspace_location_error)
+            })
+        }
+    }
 }
 
+
 class WorkspacesViewModelFactory(
-    private val firestore: FirebaseFirestore, private val auth: FirebaseAuth
+    private val application: Application
 ) : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
         if (modelClass.isAssignableFrom(WorkspacesViewModel::class.java)) {
 
-            val repository = WorkspaceRepository()
+            val firestore: FirebaseFirestore = Firebase.firestore
+            val auth: FirebaseAuth = FirebaseAuth.getInstance()
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(application)
 
-            @Suppress("UNCHECKED_CAST") return WorkspacesViewModel(firestore, auth, repository) as T
+            val repository = WorkspaceRepository(firestore, auth, fusedLocationClient)
+
+            return WorkspacesViewModel(firestore, auth, repository, application) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -1,5 +1,7 @@
 package com.example.firebase_test.workspaces
 
+import androidx.compose.ui.res.stringResource
+import com.example.firebase_test.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
@@ -12,7 +14,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,12 +24,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.text.style.TextAlign
+import com.example.firebase_test.CharacterLimitedOutlinedTextField
 
 enum class DialogType {
     NONE, CREATE_WORKSPACE, JOIN_WORKSPACE
 }
-
 
 @Composable
 fun WorkspacesControls(
@@ -51,8 +51,8 @@ fun WorkspacesControls(
                 ExtendedFloatingActionButton(
                     modifier = Modifier.width(140.dp),
                     onClick = onJoinClicked,
-                    icon = { Icon(Icons.Default.GroupAdd, "Unirse a workspace") },
-                    text = { Text("Unirse") },
+                    icon = { Icon(Icons.Default.GroupAdd, stringResource(R.string.workspaces_fab_join_description)) },
+                    text = { Text(stringResource(R.string.workspaces_fab_join_text)) },
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
@@ -60,8 +60,8 @@ fun WorkspacesControls(
                 ExtendedFloatingActionButton(
                     modifier = Modifier.width(140.dp),
                     onClick = onCreateClicked,
-                    icon = { Icon(Icons.Default.AddCircle, "Crear workspace") },
-                    text = { Text("Crear") },
+                    icon = { Icon(Icons.Default.AddCircle, stringResource(R.string.workspaces_fab_create_description)) },
+                    text = { Text(stringResource(R.string.workspaces_fab_create_text)) },
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                 )
@@ -75,10 +75,8 @@ fun WorkspacesControls(
             modifier = modifier
         ) {
             val icon = if (isFabMenuExpanded) Icons.Default.Close else Icons.Default.Add
-            Icon(icon, contentDescription = "Menú de acciones")
+            Icon(icon, contentDescription = stringResource(R.string.workspaces_fab_menu_description))
         }
-
-
     }
 }
 
@@ -89,43 +87,33 @@ fun CreateWorkspaceDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-
-    val maxLength = 25
-
-    AlertDialog(onDismissRequest = onDismiss, title = { Text("Crear nuevo Workspace") }, text = {
-        OutlinedTextField(
-            value = workspaceName,
-            onValueChange = {
-
-                if (it.length <= maxLength) {
-                    onNameChange(it)
-                }
-            },
-            label = { Text("Nombre del Workspace") },
-            singleLine = true,
-
-            supportingText = {
-                Text(
-                    text = "${workspaceName.length} / $maxLength",
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.End
-                )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.create_workspace_dialog_title)) },
+        text = {
+            CharacterLimitedOutlinedTextField(
+                value = workspaceName,
+                onValueChange = onNameChange,
+                maxLength = 25,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.create_workspace_dialog_label)) },
+                singleLine = true,
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirm,
+                enabled = workspaceName.isNotBlank()
+            ) {
+                Text(stringResource(R.string.create_workspace_dialog_confirm_button))
             }
-        )
-    }, confirmButton = {
-        Button(
-            onClick = {
-                if (workspaceName.isNotBlank()) {
-                    onConfirm()
-                }
-            }) {
-            Text("Crear")
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.common_cancel))
+            }
         }
-    }, dismissButton = {
-        TextButton(onClick = onDismiss) {
-            Text("Cancelar")
-        }
-    })
+    )
 }
 
 @Composable
@@ -135,25 +123,31 @@ fun JoinWorkspaceDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AlertDialog(onDismissRequest = onDismiss, title = { Text("Unirse a un Workspace") }, text = {
-        OutlinedTextField(
-            value = workspaceCode,
-            onValueChange = onCodeChange,
-            label = { Text("Código de invitación") },
-            singleLine = true
-        )
-    }, confirmButton = {
-        Button(
-            onClick = {
-                if (workspaceCode.isNotBlank()) {
-                    onConfirm()
-                }
-            }) {
-            Text("Unirse")
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.join_workspace_dialog_title)) },
+        text = {
+            CharacterLimitedOutlinedTextField(
+                value = workspaceCode,
+                onValueChange = onCodeChange,
+                maxLength = 6,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.join_workspace_dialog_label)) },
+                singleLine = true,
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirm,
+                enabled = workspaceCode.isNotBlank()
+            ) {
+                Text(stringResource(R.string.join_workspace_dialog_confirm_button))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.common_cancel))
+            }
         }
-    }, dismissButton = {
-        TextButton(onClick = onDismiss) {
-            Text("Cancelar")
-        }
-    })
+    )
 }
